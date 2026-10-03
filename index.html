@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>Liz & Denis · Nuestra Boda</title>
+   
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+   <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+   <div id="toast" class="toast">¡Información copiada! 📋✨</div>
+
+   <!-- CANVAS DE EXPLOSIÓN DE PÉTALOS -->
+   <canvas id="petalsCanvas"></canvas>
+
+   <!-- MÚSICA DE FONDO -->
+   <audio id="musicaInvitacion" preload="auto" loop>
+      <source src="img/musica.mp3" type="audio/mpeg">
+   </audio>
+
+   <div id="music-toggle" class="music-btn" onclick="toggleMusic()">
+       <i class="fa-solid fa-music"></i>
+   </div>
+   
+   <!-- INTRO VIDEO DEL SOBRE -->
+   <div id="contenedor-principal" onclick="activarInvitacion()">
+       <video id="videoSobre" playsinline muted preload="auto" poster="img/sobre.png">
+           <source src="img/1.mp4" type="video/mp4">
+       </video>
+       <div id="capa-boton">
+           <div class="boton-rosa-inicio" id="btn-toca-abrir">TOCÁ EL SOBRE PARA ABRIR</div>
+       </div>
+   </div>
+
+   <!-- INVITACIÓN WEB EDITORIAL -->
+   <div id="seccion-final" class="oculto">
+
+       <div class="bloque-papel-textura">
+           
+           <!-- PORTADA EN ARCO -->
+           <header class="hero-portada reveal">
+               <div class="portada-frame-inner">
+                   <img src="img/portada.png" onerror="this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80'" alt="Liz y Denis" class="portada-img">
+                   <div class="portada-overlay">
+                       <h1 class="main-title-portada">Liz & Denis</h1>
+                       <p class="title-sub-portada">NOS CASAMOS</p>
+                   </div>
+               </div>
+           </header>
+
+           <!-- SAVE THE DATE (RASPADO) -->
+           <section class="section-pad reveal text-center" id="std-section">
+               <h2 class="editorial-heading mt-5">SAVE THE DATE</h2>
+               <p class="section-sub-label">Raspá cada círculo para descubrir la fecha</p>
+
+               <div class="scratch-circles-wrapper mt-25" id="circlesWrapper">
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">24</span>
+                           <span class="circle-label">DÍA</span>
+                       </div>
+                       <canvas class="circle-canvas" data-label="DÍA"></canvas>
+                   </div>
+
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">10</span>
+                           <span class="circle-label">MES</span>
+                       </div>
+                       <canvas class="circle-canvas" data-label="MES"></canvas>
+                   </div>
+
+                   <div class="circle-scratch-card">
+                       <div class="circle-reveal-content">
+                           <span class="circle-number">2026</span>
+                           <span class="circle-label">AÑO</span>
+                       </div>
+                       <canvas class="circle-canvas" data-label="AÑO"></canvas>
+                   </div>
+               </div>
+
+               <div class="countdown-card" id="countdownCard">
+                   <p class="countdown-title">FALTAN POCOS DÍAS</p>
+                   <div class="countdown-boxes">
+                       <div class="cd-box"><span id="cd-days">00</span><p>Días</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-hours">00</span><p>Hs</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-mins">00</span><p>Min</p></div>
+                       <div class="cd-sep">:</div>
+                       <div class="cd-box"><span id="cd-secs">00</span><p>Seg</p></div>
+                   </div>
+               </div>
+           </section>
+
+           <!-- MENSAJE Y NOVIOS -->
+           <section class="section-pad reveal">
+               <div class="invitarte-card verse-block-card">
+                   <div class="verse-couple-block">
+                       <p class="invite-quote">
+                           Con Dios como guía de nuestro amor y nuestras hijas como testigos de esta hermosa historia, hemos decidido unir nuestras vidas y caminar juntos hacia un nuevo comienzo.
+                       </p>
+                       <p class="celebran-text mt-20">Nos casamos</p>
+                       <h3 class="couple-names-block">Liz & Denis</h3>
+                   </div>
+               </div>
+           </section>
+
+           <!-- GALERÍA DESLIZANTE -->
+           <section class="section-pad reveal">
+               <h2 class="editorial-heading mt-5">Nuestros Momentos</h2>
+               <p class="title-sub-cursive">Deslizá para ver las fotos</p>
+
+               <div class="gallery-slider-wrapper mt-20">
+                   <div class="gallery-slider" id="gallerySlider">
+                       <div class="slide-item"><img src="img/foto1.png" alt="Foto 1"></div>
+                       <div class="slide-item"><img src="img/foto2.png" alt="Foto 2"></div>
+                       <div class="slide-item"><img src="img/foto3.png" alt="Foto 3"></div>
+                       <div class="slide-item"><img src="img/foto4.png" alt="Foto 4"></div>
+                       <div class="slide-item"><img src="img/foto5.png" alt="Foto 5"></div>
+                       <div class="slide-item"><img src="img/foto6.png" alt="Foto 6"></div>
+                   </div>
+                   <div class="slider-hint mt-10">
+                       <i class="fa-solid fa-arrow-left-long"></i> Deslizá <i class="fa-solid fa-arrow-right-long"></i>
+                   </div>
+               </div>
+           </section>
+
+          <!-- UBICACIONES -->
+           <section class="section-pad location-section-spacious reveal">
+               <h2 class="editorial-heading mt-5">UBICACIONES</h2>
+               <p class="title-sub-cursive">Dónde celebramos</p>
+
+               <div class="venue-card-watercolor mt-25">
+                   <div class="venue-custom-icon-wrap">
+                       <i class="fa-solid fa-church venue-fa-icon"></i>
+                   </div>
+                   <h3 class="venue-title">CEREMONIA RELIGIOSA</h3>
+                   <p class="venue-time">20:00 HS</p>
+                   <p class="venue-desc">Parroquia San Antonio de Padua</p>
+                   <div class="btn-group-center mt-15">
+                       <a href="https://maps.app.goo.gl/28cBm37qZRhUCSKA7?g_st=ic" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-location-dot"></i> Ver Mapa</a>
+                       <a href="https://maps.app.goo.gl/28cBm37qZRhUCSKA7?g_st=ic" target="_blank" class="btn btn-outline-dark"><i class="fa-brands fa-waze"></i> Waze / GPS</a>
+                   </div>
+               </div>
+
+               <div class="venue-card-watercolor mt-35">
+                   <div class="venue-custom-icon-wrap">
+                       <i class="fa-solid fa-champagne-glasses venue-fa-icon"></i>
+                   </div>
+                   <h3 class="venue-title">RECEPCIÓN</h3>
+                   <p class="venue-time">21:00 HS</p>
+                   <p class="venue-desc">Salón de Eventos Gledi </p>
+                   <div class="btn-group-center mt-15">
+                       <a href="https://maps.app.goo.gl/ZFYBuMaPUXFdBjoV9?g_st=ic" target="_blank" class="btn btn-outline-dark"><i class="fa-solid fa-location-dot"></i> Ver Mapa</a>
+                       <a href="https://maps.app.goo.gl/ZFYBuMaPUXFdBjoV9?g_st=ic" target="_blank" class="btn btn-outline-dark"><i class="fa-brands fa-waze"></i> Waze / GPS</a>
+                   </div>
+               </div>
+           </section>
+
+           <!-- DRESS CODE -->
+           <section class="section-pad reveal">
+               <div class="dress-img-head mt-10">
+                   <img src="img/vestido.png" onerror="this.style.display='none'" alt="Dress Code" class="vestimenta-png-icon">
+               </div>
+               <h2 class="editorial-heading mt-5">DRESS CODE</h2>
+               <p class="title-sub-cursive">Código de Vestimenta</p>
+               <p class="dress-code-subtitle mt-15">ELEGANTE</p>
+               
+               <div class="dress-card-elegant mt-20">
+                   <p class="dress-group-title">RESERVA DE COLORES</p>
+                   <p class="dress-desc">Verde olivo y Terracota.</p>
+               </div>
+           </section>
+
+           <!-- DETALLES DE LA BODA -->
+           <section class="section-pad reveal text-center">
+               <h2 class="editorial-heading mt-5">DETALLES DE LA BODA</h2>
+               <p class="title-sub-cursive">Para tener en cuenta</p>
+
+               <div class="details-container mt-20">
+                   <div class="detail-card-item">
+                       <div class="detail-icon-wrap">
+                           <i class="fa-regular fa-clock"></i>
+                       </div>
+                       <h3 class="detail-card-title">LLEGAR PUNTUAL</h3>
+                       <p class="detail-card-desc">Les pedimos puntualidad para compartir juntos cada segundo desde la ceremonia.</p>
+                   </div>
+
+                   <div class="detail-card-item mt-20">
+                       <div class="detail-icon-wrap">
+                           <i class="fa-solid fa-chair"></i>
+                       </div>
+                       <h3 class="detail-card-title">ASIGNACIÓN DE MESAS</h3>
+                       <p class="detail-card-desc">Luego de confirmar asistencia, se les pasará el número de mesa correspondiente.</p>
+                   </div>
+
+                   <div class="detail-card-item mt-20">
+                       <div class="detail-icon-wrap">
+                           <i class="fa-solid fa-user-group"></i>
+                       </div>
+                       <h3 class="detail-card-title">CANTIDAD DE INVITADOS</h3>
+                       <p class="detail-card-desc">Por favor, respetar la cantidad de invitados según el válido asignado en su invitación.</p>
+                   </div>
+               </div>
+           </section>
+       </div>
+
+       <!-- TARJETA CONTENEDOR VERDE RÚSTICO PARA CONFIRMACIÓN -->
+       <section class="section-pad reveal text-center">
+           <div class="tarjeta-verde-rustica">
+               <h2 class="editorial-heading-light mt-5">CONFIRMACIÓN DE ASISTENCIA</h2>
+               <p class="title-sub-cursive-light">Esperamos contar contigo</p>
+               
+               <p class="rsvp-label-text mt-15">Fecha límite para confirmar asistencia:</p>
+               <p class="rsvp-date-highlight">10 / 10 / 2026</p>
+
+               <a href="https://wa.me/595972138253?text=Hola!%20Quiero%20confirmar%20mi%20asistencia%20a%20la%20boda%20de%20Liz%20y%20Denis." class="btn btn-white-pill mt-25" target="_blank">
+                   <i class="fa-brands fa-whatsapp"></i> CONFIRMAR ASISTENCIA AQUÍ
+               </a>
+           </div>
+       </section>
+
+       <!-- BLOQUE FINAL EN VERDE OLIVO RÚSTICO CON TEXTO LIBRE -->
+       <div class="bloque-verde-liso">
+           <section class="section-pad reveal text-center">
+               <div class="bible-quote-libre mt-10">
+                   <p class="bible-text-light">"Y sobre todas estas cosas vestíos de amor, que es el vínculo perfecto."</p>
+                   <span class="bible-ref-light">Colosenses 3:14</span>
+               </div>
+
+               <div class="farewell-signature mt-40">
+                   <p class="farewell-with-love-light">Con cariño,</p>
+                   <h2 class="farewell-couple-light">Liz & Denis</h2>
+               </div>
+           </section>
+
+           <footer class="editorial-footer-light">
+               <p>© GHISA DIGITAL · DESIGN STUDIO</p>
+           </footer>
+       </div>
+
+   </div>
+
+   <script src="script.js"></script>
+</body>
+</html>
